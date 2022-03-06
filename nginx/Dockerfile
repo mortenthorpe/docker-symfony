@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM arm64v8/ubuntu
 
 MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
 

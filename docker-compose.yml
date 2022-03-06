@@ -2,16 +2,16 @@ version: '2'
 
 services:
     db:
-        image: mysql
+        image: arm64v8/mariadb
         volumes:
             - "./.data/db:/var/lib/mysql"
-        ports:
-            - 33060:3306
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - 13306:3306
     php:
         build:
             context: php8-fpm
@@ -19,7 +19,7 @@ services:
                 TIMEZONE: ${TIMEZONE}
         volumes:
             - ${SYMFONY_APP_PATH}:/var/www/symfony
-            - ./logs/symfony:/var/www/symfony/app/logs
+            - ./logs/symfony:/var/www/symfony/logs
     nginx:
         build: nginx
         ports:
@@ -28,16 +28,15 @@ services:
             - php
         volumes:
             - ./logs/nginx/:/var/log/nginx
-
-    phpmyadmin:
-       image: phpmyadmin/phpmyadmin
-       container_name: pma
-       links:
-           - db
-       environment:
-           PMA_HOST: db
-           PMA_PORT: 3306
-           PMA_ARBITRARY: 1
-       restart: always
-       ports:
-           - 8081:80
+#    elk:
+#       image: willdurand/elk
+#        ports:
+#            - 81:80
+#        volumes:
+#            - ./elk/logstash:/etc/logstash
+#            - ./elk/logstash/patterns:/opt/logstash/patterns
+#        volumes_from:
+#            - php
+#            - nginx
+    redis:
+        image: arm64v8/redis
