@@ -12,6 +12,17 @@ services:
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         ports:
             - 13306:3306
+    db_test:
+        image: arm64v8/mariadb
+        volumes:
+            - "./.data/db_test:/var/lib/mysql_test"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE_TEST}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - 23306:3306
     php:
         build:
             context: php8-fpm
